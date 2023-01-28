@@ -8,40 +8,59 @@ const searchBox = document.querySelector('input');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
 
-//to clean anf trim
+const countries = name => {
+  fetchCountries(name)
+    .then(input => {
+      if (input.length > 10) {
+        Notify.info(
+          'Too many matches found. Please enter a more specific name.'
+        );
+      } else if (input.length > 1) {
+        input.forEach(country => {
+          listElem(country);
+        });
+      } else {
+        countryInfo.innerHTML = '';
+        input.forEach(country => {
+          listElemDetails(country);
+        });
+      }
+    })
+    .catch(error => {
+      Notify.failure('Oops, there is no country with that name');
+      console.log(error);
+    });
+};
+
+// DOM
+const listElem = country => {
+  countryList.insertAdjacentHTML(
+    'beforeend',
+    `<li class="country-info__elem">
+  <img src="${country.flags.svg}" width="60" height="50"/>
+  <h2>${country.name}</h2> </li>`
+  );
+};
+
+const listElemDetails = country => {
+  countryInfo.innerHTML = `<li class="country-info__elem">
+    <img src="${country.flags.svg}" width="60" height="50"/>
+    <h2>${country.name}</h2>
+    <p>${country.capital}</p>
+    <p>${country.population}</p>
+    <p>${country.languages}</p>
+    </li>`;
+};
+
 searchBox.addEventListener(
   'input',
   debounce(() => {
     countryList.innerHTML = '';
     countryInfo.innerHTML = '';
     if (searchBox.value !== '') {
-      searchBox.value.trim();
+      countries(searchBox.value.trim());
+    } else {
+      return;
     }
-    return;
   }, DEBOUNCE_DELAY)
 );
-
-function fetchCountries(name) {
-  return fetch(
-    `https://restcountries.com/v3.1/name/fields=name,capital,population,languages,flags`
-  )
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(response.status);
-      }
-      return response.json();
-    })
-    .catch(error => {
-      Notify.failure('Oops, there is no country with that name');
-      console.log(error);
-    });
-}
-
-// const countryDetails = country {
-// countryInfo.innerHTML = `<li>
-//           <h2 class="post-title">${title.slice(0, 30)}</h2>
-//           <p><b>Post id</b>: ${id}</p>
-//           <p><b>Author id</b>: ${userId}</p>
-//           <p class="post-body">${body}</p>
-//         </li>`;
-// }
