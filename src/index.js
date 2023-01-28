@@ -36,20 +36,24 @@ const countries = name => {
 const listElem = country => {
   countryList.insertAdjacentHTML(
     'beforeend',
-    `<li class="country-info__elem">
+    `<li class="country-list__elem">
   <img src="${country.flags.svg}" width="60" height="50"/>
-  <h2>${country.name}</h2> </li>`
+  <h2>${country.name.common}</h2> </li>`
   );
 };
 
 const listElemDetails = country => {
-  countryInfo.innerHTML = `<li class="country-info__elem">
-    <img src="${country.flags.svg}" width="60" height="50"/>
-    <h2>${country.name}</h2>
-    <p>${country.capital}</p>
-    <p>${country.population}</p>
-    <p>${country.languages}</p>
-    </li>`;
+  const lang = Object.values(country.languages);
+  countryInfo.insertAdjacentHTML(
+    'beforeend',
+    `<li class="country-info__elem">
+    <div class="country-info__header"><img src="${country.flags.svg}" width="60" height="50"/>
+    <h2>${country.name.common}</h2></div>
+    <p><strong>Capital:</strong> ${country.capital}</p>
+    <p><strong>Population:</strong> ${country.population}</p>
+    <p><strong>Language:</strong> ${lang}</p>
+    </li>`
+  );
 };
 
 searchBox.addEventListener(
