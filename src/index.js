@@ -3,12 +3,6 @@ import { Notify } from 'notiflix';
 import { fetchCountries } from './fetchCountries';
 import { debounce } from 'lodash';
 
-let headers = new Headers({
-  'Access-Control-Allow-Origin': 'https://restcountries.com',
-  'Access-Control-Allow-Methods': 'GET, HEAD, POST, OPTIONS',
-  'Access-Control-Allow-Headers': '*',
-});
-
 const DEBOUNCE_DELAY = 300;
 const searchBox = document.querySelector('input');
 const countryList = document.querySelector('.country-list');
